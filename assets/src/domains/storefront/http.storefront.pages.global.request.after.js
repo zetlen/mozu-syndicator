@@ -37,8 +37,10 @@ module.exports = function(context, callback) {
 
   var productClient = productClientFactory(context);
   var searchClient = searchClientFactory(context);
+  productClient.context["user-claims"] = searchClient.context["user-claims"] = null;
 
-  var qs = querystring.parse(url.parse(context.request.url).query);
+  var qs = querystring.parse(url.parse(context.request.url)
+    .query);
 
   if ("syndicator" in qs) {
     setMimeType("text/javascript");
@@ -47,10 +49,10 @@ module.exports = function(context, callback) {
     if (!qs.syndicate) {
       return callback(noSyndicateQueriesError());
     }
-    var syndicateQueries; 
+    var syndicateQueries;
     try {
       syndicateQueries = JSON.parse(qs.syndicate);
-    } catch(e) {
+    } catch (e) {
       return callback(unparseableSyndicateQueriesError(e));
     }
     if (!Array.isArray(syndicateQueries)) {
@@ -63,32 +65,42 @@ module.exports = function(context, callback) {
 
     // little shortcut for the common case
     if (syndicateQueries.length === 1 && syndicateQueries[0].productCodes && syndicateQueries[0].productCodes.length === 1) {
-      return productClient.getProduct({ productCode: syndicateQueries[0].productCodes[0] }).then(function(prod) {
-        var finalResponse = {};
-        finalResponse[syndicateQueries[0].id] = {
-          items: [prod]
-        };
-        finishResponse(finalResponse);
-      }).catch(callback);
-    }
+      console.log('shortcut!');
+      productClient.getProduct({
+          productCode: syndicateQueries[0].productCodes[0]
+        })
+        .then(function(prod) {
+          var finalResponse = {};
+          finalResponse[syndicateQueries[0].id] = {
+            items: [prod]
+          };
+          finishResponse(finalResponse);
+        })
+        .catch(callback);
+    } else {
 
-    var apiCalls = syndicateQueries.map(function(query) {
-      if (query.productCodes) {
-        return searchClient.search({ filter: "ProductCode eq " + query.productCodes.join(" or ProductCode eq ") });
-      } else {
-        if (!query.filter && !query.query) {
-          throw unparseableSyndicateQueriesError("The query " + JSON.stringify(query) + " could not be parsed. At least a productCodes, filter, or search parameter is required.");
+      var apiCalls = syndicateQueries.map(function(query) {
+        if (query.productCodes) {
+          return searchClient.search({
+            filter: "ProductCode eq " + query.productCodes.join(" or ProductCode eq ")
+          });
+        } else {
+          if (!query.filter && !query.query) {
+            throw unparseableSyndicateQueriesError("The query " + JSON.stringify(query) + " could not be parsed. At least a productCodes, filter, or search parameter is required.");
+          }
+          return searchClient.search(query);
         }
-        return searchClient.search(query);
-      }
-    });
+      });
 
-    return Promise.all(apiCalls).then(function(apiResponses) {
-      finishResponse(apiResponses.reduce(function(payload, res, i) {
-        payload[syndicateQueries[i].id] = res;
-        return payload;
-      }, {}));
-    }).catch(callback);
+      Promise.all(apiCalls)
+        .then(function(apiResponses) {
+          finishResponse(apiResponses.reduce(function(payload, res, i) {
+            payload[syndicateQueries[i].id] = res;
+            return payload;
+          }, {}));
+        })
+        .catch(callback);
+    }
   } else {
     callback();
   }
