@@ -47,10 +47,14 @@ Here's the easy part: Paste this code snippet anywhere on your non-Mozu website.
 
 (function() {
 
-    window.MozuSyndicatedStore = "http://t8819-s12869.sandbox.mozu-qa.com/";
+window.MozuSyndicatedStore = "http://t8819-s12869.sandbox.mozu-qa.com/";
 
-    (function(s, y, n, d, i, c, a, t, e) { if (!s[d]) { s[d] = c; t = y.createElement(n), e = y.getElementsByTagName(n)[0]; t.async = 1; t.src = a + i; e.parentNode.insertBefore(t, e); } })(window, document, 'script', 'MozuSyndicator', "?syndicator", "_loading_", MozuSyndicatedStore);
-  
+(function(s, y, n, d, i, c, a, t, e) { 
+  if (!s[d]) { s[d] = c; t = y.createElement(n), 
+  e = y.getElementsByTagName(n)[0]; t.async = 1;
+  t.src = a + i; e.parentNode.insertBefore(t,e);
+} })(window,document,'script','MozuSyndicator', 
+"?syndicator","_loading_",MozuSyndicatedStore);
 }());
 
 ```
@@ -68,11 +72,18 @@ Once the code snippet is on the page, you can embed Hypr templates anywhere, tag
    <div class="mozu-product">
       <h3 class="mozu-productname">{{ model.content.productName }}</h2>
       <figure>
-        <a href="http://t8819-s12869.sandbox.mozu-qa.com/{{ model.url }}"<img style="width: 60%" src="{{ model.content.productImages|first|prop('imageUrl') }}" /></a>
+        <a href="http://t8819-s12869.sandbox.mozu-qa.com/{{ model.url }}">
+          <img 
+           style="width: 60%" 
+           src="{{ model.content.productImages|first|prop('imageUrl') }}" />
+        </a>
       </figure>
       <h4 class="mozu-price">{{ model.price.price|currency }}</h4>
       <p class="mozu-description">{{ model.content.productShortDescription }}</p>
-      <p class="mozu-availability"><strong>Availability:</strong> {{ model|get_product_attribute_value("tenant~availability") }}</p>
+      <p class="mozu-availability">
+        <strong>Availability:</strong> 
+        {{ model|get_product_attribute_value("tenant~availability") }}
+      </p>
    </div> 
 </script>
 ```
@@ -87,7 +98,12 @@ And of course, this also works:
     <ul>
     {% for item in model.items %}
       <li>
-        <a href="http://t8819-s12869.sandbox.mozu-qa.com/{{ item.url }}"<img style="width: 60%" src="{{ item.content.productImages|first|prop('imageUrl') }}" /> {{ item.content.productName }}</a>
+        <a href="http://t8819-s12869.sandbox.mozu-qa.com/{{ item.url }}">
+          <img
+           style="width: 60%" 
+           src="{{ item.content.productImages|first|prop('imageUrl') }}" />
+          {{ item.content.productName }}
+        </a>
       </li>
     {% endfor %}
     </ul>
@@ -101,7 +117,12 @@ And of course, this also works:
     <ul>
     {% for item in model.items %}
       <li>
-        <a href="http://t8819-s12869.sandbox.mozu-qa.com/{{ item.url }}"<img style="width: 60%" src="{{ item.content.productImages|first|prop('imageUrl') }}" /> {{ item.content.productName }}</a>
+        <a href="http://t8819-s12869.sandbox.mozu-qa.com/{{ item.url }}">
+          <img 
+           style="width: 60%"
+           src="{{ item.content.productImages|first|prop('imageUrl') }}" />
+          {{ item.content.productName }}
+        </a>
       </li>
     {% endfor %}
     </ul>
