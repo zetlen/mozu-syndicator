@@ -31,13 +31,10 @@ var querystring = require('querystring');
 var productClientFactory = require('mozu-node-sdk/clients/commerce/catalog/storefront/product');
 var searchClientFactory = require('mozu-node-sdk/clients/commerce/catalog/storefront/productSearchResult');
 
-var FiddlyDiddle = require('mozu-node-sdk/plugins/fiddler-proxy');
-
-var syndicatorLibContents = fs.readFileSync(path.join(__dirname, '../../syndicator-lib.js'), 'utf8');
+var syndicatorLibContents = fs.readFileSync(path.join(__dirname, '../../syndicator-built.js'), 'utf8');
 
 module.exports = function(context, callback) {
 
-  context.plugins = [FiddlyDiddle];
   var productClient = productClientFactory(context);
   var searchClient = searchClientFactory(context);
 
@@ -119,9 +116,7 @@ module.exports = function(context, callback) {
   }
 
   function setMimeType(v) {
-    context.response.set({
-      'Content-Type': v + '; charset=utf-8'
-    });
+    //context.response.set('Content-Type', v + '; charset=utf-8');
   }
 
   function setBody(text) {

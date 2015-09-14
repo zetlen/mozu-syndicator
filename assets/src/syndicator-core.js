@@ -1,4 +1,5 @@
-var Hypr = require('hypr-storefront');
+/* jshint loopfunc:true */
+var Hypr = require('hypr');
 var domready = require('domready');
 
 function renderAll(resolved) {
@@ -42,7 +43,7 @@ function processScripts(scripts) {
           productCode: script.getAttribute('data-mozu-product-code'),
           productCodes: script.getAttribute('data-mozu-product-codes'),
           filter: script.getAttribute('data-mozu-product-filter'),
-          query: script.getAttribute('data-mozu-product-query');
+          query: script.getAttribute('data-mozu-product-query')
         };
 
         if (dataAttributes.productCode) {
@@ -71,7 +72,27 @@ function processScripts(scripts) {
   };
 }
 
+function getQueries(queries, cb) {
+  var url = MozuSyndicatedStore;
+  if (url.lastIndexOf('/') !== url.length-1) url += "/";
+  url += "?syndicate=";
+  url += encodeURIComponent(JSON.stringify(queries));
+  var callbackName = "__mozu_syndicator_callback" + (new Date()).getTime();
+  url += "&callback=" + callbackName;
+  window[callbackName] = cb;
+  var s = document.createElement('script');
+  s.src = url;
+  s.async = 1;
+  document.head.appendChild(s);
+}
+
 domready(function() {
+
+
+  if (!window.MozuSyndicatedStore) {
+    throw new Error("Global MozuSyndicatedStore variable missing.");
+  }
+
   var scripts = document.getElementsByTagName('script');
 
   var processed = processScripts(scripts);
@@ -79,11 +100,54 @@ domready(function() {
   var productCodeDispatch = processes.productCodeDispatch;
   var templates = process.templates;
 
-  getQueries(queries, function(error, results) {
-    if (error) throw error;
+  getQueries(queries, function(results) {
     var resolved = [];
-
+    if (results.products) {
+      for (var d in productCodeDispatch) {
+        if (productCodeDispatch.hasOwnProperty(d)) {
+          if (typeof productCodeDispatch[d] === "string") {
+            resolved[d] = {
+              template: templates[d],
+              results: (function(prods) {
+                for (var j = 0; j < prods.length; j++) {
+                  if (prods[j].productCode === productCodeDispatch[d]) {
+                    return prods[j];
+                  }
+                }
+              }(results.products.items))
+            };
+          } else {
+            resolved[d] = {
+              template: templates[d],
+              results: {
+                items: (function(prods, codes) {
+                  var out = [];
+                  for (var j = 0; j < prods.length; j++) {
+                    for (var ii = 0;  ii < codes.length; ii++) {
+                      if (codes[ii] === prods[j].productCode) {
+                        out.push(prods[j]);
+                        break;
+                      }
+                    }
+                  }
+                  return out;
+                }(results.products.items, productCodeDispatch[d]))
+              }
+            };
+          }
+        }
+      } 
+    } 
+    delete results.products;
+    for (var resId in results) {
+      if (results.hasOwnProperty(resId)) {
+        resolved[resId] = {
+          template: templates[resId],
+          results: results[resId]
+        };
+      }
+    }
+    renderAll(resolved);
   });
 
-
-})
+});

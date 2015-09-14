@@ -9,14 +9,14 @@ module.exports = function (grunt) {
             options: {
               node: true
             },
-            'normal': ['./assets/src/**/*.js'],
+            'normal': ['assets/src/**/*.js', '!assets/src/syndicator-built.js'],
             'continuous': {
                 'options': { 'force': true },
                 'src': '<%= jshint.normal %>'
             }
         },
         browserify: {
-            'all': {
+            'actions': {
                 'files': [{
                         'expand': true,
                         'cwd': 'assets/src/',
@@ -36,9 +36,13 @@ module.exports = function (grunt) {
                         'insertGlobals': false
                     }
                 }
+            },
+            'lib': {
+              src: ['assets/src/syndicator-core.js'],
+              dest: 'assets/src/syndicator-built.js'
             }
         },
-        manifest: { 'all': { 'files': '<%= browserify.all.files %>' } },
+        manifest: { 'all': { 'files': '<%= browserify.actions.files %>' } },
         mozusync: {
             'options': {
                 'applicationKey': '<%= mozuconfig.workingApplicationKey %>',
@@ -80,7 +84,8 @@ module.exports = function (grunt) {
                 'tasks': [
                     'jshint:continuous',
                     'test',
-                    'browserify:all',
+                    'browserify:lib',
+                    'browserify:actions',
                     'manifest'
                 ]
             },
@@ -101,7 +106,8 @@ module.exports = function (grunt) {
     });
     grunt.registerTask('build', [
         'jshint:normal',
-        'browserify:all',
+        'browserify:lib',
+        'browserify:actions',
         'manifest',
         'test'
     ]);

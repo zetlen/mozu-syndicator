@@ -15,9 +15,9 @@ var assert = Simulator.assert;
 
 var pgrAfter = 'http.storefront.pages.global.request.after';
 
-var libContents = require('fs').readFileSync('./assets/src/syndicator-lib.js', 'utf8');
+var libContents = require('fs').readFileSync('./assets/src/syndicator-built.js', 'utf8');
 
-var testProductCode = 'MS-CAR-RAK-007';
+var testProductCode = '100148';
 
 var testTenantConfig = require('../../mozu.test.config.json');
 
@@ -61,8 +61,8 @@ describe(pgrAfter, function () {
 
     var context = addTestTenantConfig(Simulator.context(pgrAfter, callback));
     context.request.url = "/?syndicator";
-    context.response.set = function(o) {
-      headerWasSetTo = o && o['Content-Type'];
+    context.response.set = function(k,v) {
+      if (k === "Content-Type") headerWasSetTo = v;
     };
 
     Simulator.simulate(pgrAfter, action, context, callback);
@@ -215,7 +215,7 @@ describe(pgrAfter, function () {
       var fuzzyResult = context.response.body.search2;
       assert(fuzzyResult, "no search2");
       assert(fuzzyResult.items, "no items in search2");
-      assert(fuzzyResult.items[0].content.productName.toLowerCase().indexOf('gopro') !== -1, "First search result didn't seem to be a GoPro");
+      assert(fuzzyResult.items[0].content.productName.toLowerCase().indexOf('xbox') !== -1, "First search result didn't seem to be a GoPro");
 
       done();
     }
@@ -228,7 +228,7 @@ describe(pgrAfter, function () {
       },
       {
         id: "search2",
-        query: "GoPro"
+        query: "xbox"
       }
     ]));
 
