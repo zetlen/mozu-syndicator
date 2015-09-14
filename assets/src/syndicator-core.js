@@ -2,14 +2,16 @@
 var Hypr = require('hypr');
 var domready = require('domready');
 
+var hyprMan = new Hypr.Manager({});
+
 function renderAll(resolved) {
   for (var k in resolved) {
     if (resolved.hasOwnProperty(k)) {
       (function(template, results) {
-        var output = Hypr.engine.render(template.textContent || template.innerText, { locals: { model: results }});
+        var output = hyprMan.evaluate(template.textContent || template.innerText, { model: results });
         var container = document.createElement('span');
         container.innerHTML = output;
-        template.parentNode.insertBefore(cont, template);
+        template.parentNode.insertBefore(container, template);
       }(resolved[k].template, resolved[k].results));
     }
   }
@@ -55,8 +57,8 @@ function processScripts(scripts) {
         } else {
           queries.push({
             id: id,
-            filter: filter,
-            query: query
+            filter: dataAttributes.filter,
+            query: dataAttributes.query
           });
         }
       }  
@@ -75,11 +77,11 @@ function processScripts(scripts) {
 function getQueries(queries, cb) {
   var url = MozuSyndicatedStore;
   if (url.lastIndexOf('/') !== url.length-1) url += "/";
-  url += "?syndicate=";
-  url += encodeURIComponent(JSON.stringify(queries));
   var callbackName = "__mozu_syndicator_callback" + (new Date()).getTime();
-  url += "&callback=" + callbackName;
   window[callbackName] = cb;
+  url += "?callback=" + callbackName;
+  url += "&syndicate=";
+  url += encodeURIComponent(JSON.stringify(queries));
   var s = document.createElement('script');
   s.src = url;
   s.async = 1;
@@ -97,8 +99,8 @@ domready(function() {
 
   var processed = processScripts(scripts);
   var queries = processed.queries;
-  var productCodeDispatch = processes.productCodeDispatch;
-  var templates = process.templates;
+  var productCodeDispatch = processed.productCodeDispatch;
+  var templates = processed.templates;
 
   getQueries(queries, function(results) {
     var resolved = [];

@@ -1,17 +1,18 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (process){
 /* jshint loopfunc:true */
 var Hypr = require('hypr');
 var domready = require('domready');
+
+var hyprMan = new Hypr.Manager({});
 
 function renderAll(resolved) {
   for (var k in resolved) {
     if (resolved.hasOwnProperty(k)) {
       (function(template, results) {
-        var output = Hypr.engine.render(template.textContent || template.innerText, { locals: { model: results }});
+        var output = hyprMan.evaluate(template.textContent || template.innerText, { model: results });
         var container = document.createElement('span');
         container.innerHTML = output;
-        template.parentNode.insertBefore(cont, template);
+        template.parentNode.insertBefore(container, template);
       }(resolved[k].template, resolved[k].results));
     }
   }
@@ -57,8 +58,8 @@ function processScripts(scripts) {
         } else {
           queries.push({
             id: id,
-            filter: filter,
-            query: query
+            filter: dataAttributes.filter,
+            query: dataAttributes.query
           });
         }
       }  
@@ -77,11 +78,11 @@ function processScripts(scripts) {
 function getQueries(queries, cb) {
   var url = MozuSyndicatedStore;
   if (url.lastIndexOf('/') !== url.length-1) url += "/";
-  url += "?syndicate=";
-  url += encodeURIComponent(JSON.stringify(queries));
   var callbackName = "__mozu_syndicator_callback" + (new Date()).getTime();
-  url += "&callback=" + callbackName;
   window[callbackName] = cb;
+  url += "?callback=" + callbackName;
+  url += "&syndicate=";
+  url += encodeURIComponent(JSON.stringify(queries));
   var s = document.createElement('script');
   s.src = url;
   s.async = 1;
@@ -99,8 +100,8 @@ domready(function() {
 
   var processed = processScripts(scripts);
   var queries = processed.queries;
-  var productCodeDispatch = processes.productCodeDispatch;
-  var templates = process.templates;
+  var productCodeDispatch = processed.productCodeDispatch;
+  var templates = processed.templates;
 
   getQueries(queries, function(results) {
     var resolved = [];
@@ -154,8 +155,7 @@ domready(function() {
 
 });
 
-}).call(this,require('_process'))
-},{"_process":6,"domready":2,"hypr":17}],2:[function(require,module,exports){
+},{"domready":2,"hypr":17}],2:[function(require,module,exports){
 /*!
   * domready (c) Dustin Diaz 2014 - License MIT
   */

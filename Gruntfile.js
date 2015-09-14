@@ -119,6 +119,12 @@ module.exports = function (grunt) {
         'mozusync:wipe',
         'mozusync:upload'
     ]);
+    grunt.registerTask('install', [
+      'browserify:lib',
+      'browserify:actions',
+      'manifest',
+      'mozusync:upload'
+    ]);
     grunt.registerTask('cont', ['watch']);
     grunt.registerTask('c', ['watch']);
     grunt.registerTask('w', ['watch']);
