@@ -1,0 +1,14 @@
+{
+  "exports": [
+    {
+      "id": "embedded.platform.applications.install",
+      "virtualPath": "./dist/platform.applications.manifest.all.js",
+      "actionId": "embedded.platform.applications.install"
+    },
+    {
+      "id": "http.storefront.pages.global.request.after",
+      "virtualPath": "./dist/storefront.manifest.all.js",
+      "actionId": "http.storefront.pages.global.request.after"
+    }
+  ]
+}

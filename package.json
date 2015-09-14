@@ -1,0 +1,26 @@
+{
+  "name": "mozu-syndicator",
+  "version": "0.1.0",
+  "description": "Use Arc.js to syndicate Mozu store content to other websites, using a developer-friendly code snippet.",
+  "repository": {
+    "type": "git",
+    "url": "mozu/syndicator"
+  },
+  "devDependencies": {
+    "brfs": "^1.4.1",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^4.0.1",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-mozu-appdev-sync": "^0.5.5",
+    "load-grunt-tasks": "^3.2.0",
+    "mocha": "^2.3.2",
+    "mozu-action-helpers": "^0.3.2",
+    "mozu-action-simulator": "^1.5.0",
+    "time-grunt": "^1.2.1"
+  },
+  "dependencies": {
+    "mozu-node-sdk": "^1.18.15223-2"
+  }
+}

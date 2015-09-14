@@ -1,0 +1,23 @@
+<script>
+(function() {
+
+    window.MozuSyndicatedStore = "http://t9177-s11714.sandbox.mozu.com/";
+
+    (function(s, y, n, d, i, c, a, t, e) { if (!s[d]) { s[d] = t; c = y.createElement(n), a = y.getElementsByTagName(n)[0]; c.async = 1; c.src = e + i; a.parentNode.insertBefore(c, a); } })(window, document, 'script', 'MozuSyndicator', "?syndicator", "_loading_", MozuSyndicatedStore);
+
+});
+</script>
+
+<script type="text/mozu-syndicated" data-mozu-product-code="MS-CAR-RAK-007">
+   <div class="a-mozu-product">
+      <h2>{{ model.name }}</h2>
+      <figure>
+        <img src="{{ model.content.productImages|first|prop('imageUrl') }}" />
+      </figure>
+      <ul>
+      {% for property in model.properties %}
+        <li><strong>{{ property.name }}</strong>:  {% with property.values|first as value %}{{ value.stringValue|default(value.value) }}{% endwith %}
+      {% endfor %}
+      </ul>
+   </div> 
+</script>

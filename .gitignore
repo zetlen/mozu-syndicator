@@ -1,0 +1,6 @@
+node_modules/**
+dist/**
+.yo-rc.json
+mozu.config.json
+mozu.test.config.json
+mozu.config
