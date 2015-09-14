@@ -4,3 +4,4 @@ dist/**
 mozu.config.json
 mozu.test.config.json
 mozu.config
+*.swp

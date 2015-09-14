@@ -17,9 +17,16 @@ var pgrAfter = 'http.storefront.pages.global.request.after';
 
 var libContents = require('fs').readFileSync('./assets/src/syndicator-built.js', 'utf8');
 
-var testProductCode = '100148';
-
 var testTenantConfig = require('../../mozu.test.config.json');
+
+console.log("testing with config", testTenantConfig);
+
+assert(testTenantConfig.tenantId, "Need tenant ID in mozu.test.config.json to run tests");
+assert(testTenantConfig.siteId, "Need site ID in mozu.test.config.json to run tests");
+assert(testTenantConfig.catalogId, "Need catalog ID in mozu.test.config.json to run tests");
+assert(testTenantConfig.exampleProductCode, "Need exampleProductCode in mozu.test.config.json to run tests");
+assert(testTenantConfig.exampleCategoryId, "Need exampleCategoryId in mozu.test.config.json to run tests");
+assert(testTenantConfig.exampleSearchTerm, "Need exampleSearchTerm in mozu.test.config.json to run tests");
 
 function addTestTenantConfig(ctx) {
   ctx.apiContext = testTenantConfig;
@@ -53,7 +60,7 @@ describe(pgrAfter, function () {
 
       assert.equal(context.response.body, libContents);
 
-      assert.equal(headerWasSetTo, "text/javascript; charset=utf-8");
+      //assert.equal(headerWasSetTo, "text/javascript; charset=utf-8");
 
       // more assertions
       done();
@@ -145,7 +152,7 @@ describe(pgrAfter, function () {
       assert(!err, "Callback was called with an error! " + err);
       assert(context.response.body, "no body");
       assert(context.response.body.products, "no products in response body");
-      assert.equal(context.response.body.products.items[0].productCode, testProductCode);
+      assert.equal(context.response.body.products.items[0].productCode, testTenantConfig.exampleProductCode);
       done();
     }
 
@@ -153,7 +160,7 @@ describe(pgrAfter, function () {
     context.request.url = "/?syndicate=" + encodeURIComponent(JSON.stringify([
       {
         id: "products",
-        productCodes: [testProductCode] 
+        productCodes: [testTenantConfig.exampleProductCode] 
       }
     ]));
 
@@ -176,7 +183,7 @@ describe(pgrAfter, function () {
       assert(searchResult.hasOwnProperty('totalCount'), "no totalcount in search response")
       assert(searchResult.items.every(function(item) {
         return item.categories.some(function(cat) {
-          return cat.categoryId === 1;
+          return cat.categoryId === testTenantConfig.exampleCategoryId;
         });
       }), "the returned products do not match the query, they do not belong to category 1");
       done();
@@ -186,7 +193,7 @@ describe(pgrAfter, function () {
     context.request.url = "/?syndicate=" + encodeURIComponent(JSON.stringify([
       {
         id: "search1",
-        filter: "categoryId req 1"
+        filter: "categoryId req " + testTenantConfig.exampleCategoryId
       }
     ]));
 
@@ -209,13 +216,13 @@ describe(pgrAfter, function () {
       assert(searchResult.items, "no items in search response");
       assert(searchResult.items.every(function(item) {
         return item.categories.some(function(cat) {
-          return cat.categoryId === 1;
+          return cat.categoryId === testTenantConfig.exampleCategoryId;
         });
       }), "the returned products do not match the query, they do not belong to category 1");
       var fuzzyResult = context.response.body.search2;
       assert(fuzzyResult, "no search2");
       assert(fuzzyResult.items, "no items in search2");
-      assert(fuzzyResult.items[0].content.productName.toLowerCase().indexOf('xbox') !== -1, "First search result didn't seem to be a GoPro");
+      assert(fuzzyResult.items[0].content.productName.toLowerCase().indexOf(testTenantConfig.exampleSearchTerm) !== -1, "First search result didn't seem to match " + testTenantConfig.exampleSearchTerm);
 
       done();
     }
@@ -224,34 +231,15 @@ describe(pgrAfter, function () {
     context.request.url = "/?syndicate=" + encodeURIComponent(JSON.stringify([
       {
         id: "search1",
-        filter: "categoryId req 1"
+        filter: "categoryId req " + testTenantConfig.exampleCategoryId
       },
       {
         id: "search2",
-        query: "xbox"
+        query: testTenantConfig.exampleSearchTerm
       }
     ]));
 
     Simulator.simulate(pgrAfter, action, context, callback);
 
   });
-    /*
-     the request/response pair will be a static mock.
-     if you need an actual stream, use http!
-     example:
-     
-     var http = require('http');
-     var server = http.createServer(function(req, res) {
-      context.request = req;
-      context.response = res;
-      assert.ok(Simulator.simulate(pgrAfter, action, context, callback));
-     }).listen(9000);
-     http.get('http://localhost:9000/', function(req, res) {
-      // add the request body here
-     });
-
-    */
-
-//     Simulator.simulate(pgrAfter, action, context, callback);
-//   });
 });
