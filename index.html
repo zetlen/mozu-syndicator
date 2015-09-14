@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Mozu-syndicator by zetlen</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Mozu-syndicator</h1>
+          <h2>Syndicated content from Mozu sites via Arc.js.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/zetlen/mozu-syndicator/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/zetlen/mozu-syndicator/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/zetlen/mozu-syndicator" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a id="mozu-syndicator" class="anchor" href="#mozu-syndicator" aria-hidden="true"><span class="octicon octicon-link"></span></a>Mozu Syndicator</h1>
+
+<h3>
+<a id="version-010" class="anchor" href="#version-010" aria-hidden="true"><span class="octicon octicon-link"></span></a>version 0.1.0</h3>
+
+<p>An Arc.js-powered content syndication library to help you <em>seamlessly embed Mozu content</em> on other websites.</p>
+
+<h2>
+<a id="installing-the-library" class="anchor" href="#installing-the-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installing the library</h2>
+
+<p>Like other Arc.js actions built from shared code, you'll have to download this repository. You can download it as a ZIP or use Git to clone it yourself:</p>
+
+<div class="highlight highlight-source-shell"><pre>git clone http://github.com/zetlen/mozu-syndicator</pre></div>
+
+<p>Next, you should use the Mozu App Generator to configure your local repository to connect to your local Mozu developer account. First, create a Mozu App called "Syndicator" in your Developer Center. Copy its newly generated Application Key.</p>
+
+<p>Next, if you haven't already installed the Mozu App Generator using NPM, do so now:</p>
+
+<div class="highlight highlight-source-shell"><pre>npm install -g yo generator-mozu-app</pre></div>
+
+<p>Then, use the app generator to create a new configuration file.</p>
+
+<div class="highlight highlight-source-shell"><pre>yo mozu-app --config</pre></div>
+
+<p>Enter the application key when prompted, and your credentials for the Mozu Developer Center.</p>
+
+<p>Once those are configured, you can run the install script, which will build and upload your app.</p>
+
+<div class="highlight highlight-source-shell"><pre>grunt install</pre></div>
+
+<p><em>Note that running <code>grunt</code> by itself here will run the whole build process, including linting and testing. Until you have created a <code>mozu.test.config.json</code> the tests will fail.</em></p>
+
+<p>Now that your library is uploaded, you should be able to go back to the Developer Center, find your "Syndicator" app, and click "Install" to choose your tenant to install it on.</p>
+
+<p>The Syndicator library adds a behavior to your storefront; it will now serve the Syndicator library, and respond to batched requests for product data.</p>
+
+<h2>
+<a id="using-the-code-snippet" class="anchor" href="#using-the-code-snippet" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using the Code Snippet</h2>
+
+<p>Here's the easy part: Paste this code snippet anywhere on your non-Mozu website.</p>
+
+<div class="highlight highlight-source-js"><pre>
+(<span class="pl-k">function</span>() {
+
+    <span class="pl-c1">window</span>.MozuSyndicatedStore <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/<span class="pl-pds">"</span></span>;
+
+    (<span class="pl-k">function</span>(<span class="pl-smi">s</span>, <span class="pl-smi">y</span>, <span class="pl-smi">n</span>, <span class="pl-smi">d</span>, <span class="pl-smi">i</span>, <span class="pl-smi">c</span>, <span class="pl-smi">a</span>, <span class="pl-smi">t</span>, <span class="pl-smi">e</span>) { <span class="pl-k">if</span> (<span class="pl-k">!</span>s[d]) { s[d] <span class="pl-k">=</span> c; t <span class="pl-k">=</span> y.<span class="pl-c1">createElement</span>(n), e <span class="pl-k">=</span> y.<span class="pl-c1">getElementsByTagName</span>(n)[<span class="pl-c1">0</span>]; t.async <span class="pl-k">=</span> <span class="pl-c1">1</span>; t.src <span class="pl-k">=</span> a <span class="pl-k">+</span> i; e.<span class="pl-c1">parentNode</span>.<span class="pl-c1">insertBefore</span>(t, e); } })(<span class="pl-c1">window</span>, <span class="pl-c1">document</span>, <span class="pl-s"><span class="pl-pds">'</span>script<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>MozuSyndicator<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">"</span>?syndicator<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>_loading_<span class="pl-pds">"</span></span>, MozuSyndicatedStore);
+
+}());
+</pre></div>
+
+<p>Replace the value of <code>window.MozuSyndicatedStore</code> with your own store domain. (Include a trailing slash.)</p>
+
+<p>Now, you can embed Mozu products, and product search results anywhere on your page. Yes, you can use Hypr just like on Mozu. Yes, that's all.</p>
+
+<h2>
+<a id="working-with-syndicated-mozu-content" class="anchor" href="#working-with-syndicated-mozu-content" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working with Syndicated Mozu Content</h2>
+
+<p>Once the code snippet is on the page, you can embed Hypr templates anywhere, tag them with Mozu product searches or product codes, and they will come alive. Use a special <code>&lt;script&gt;</code> tag with the <code>type</code> attribute set to <code>"text/mozu-syndicated"</code>.</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/mozu-syndicated<span class="pl-pds">"</span></span> <span class="pl-e">data-mozu-product-code</span>=<span class="pl-s"><span class="pl-pds">"</span>AftershockPKG1<span class="pl-pds">"</span></span>&gt;
+   &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>mozu-product<span class="pl-pds">"</span></span>&gt;
+      &lt;<span class="pl-ent">h3</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>mozu-productname<span class="pl-pds">"</span></span>&gt;{{ model.content.productName }}&lt;/<span class="pl-ent">h2</span>&gt;
+      &lt;<span class="pl-ent">figure</span>&gt;
+        &lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/{{ model.url }}<span class="pl-pds">"</span></span>&lt;<span class="pl-e">img</span> <span class="pl-e">style</span>=<span class="pl-s"><span class="pl-pds">"</span>width: 60%<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>{{ model.content.productImages|first|prop('imageUrl') }}<span class="pl-pds">"</span></span> /&gt;&lt;/<span class="pl-ent">a</span>&gt;
+      &lt;/<span class="pl-ent">figure</span>&gt;
+      &lt;<span class="pl-ent">h4</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>mozu-price<span class="pl-pds">"</span></span>&gt;{{ model.price.price|currency }}&lt;/<span class="pl-ent">h4</span>&gt;
+      &lt;<span class="pl-ent">p</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>mozu-description<span class="pl-pds">"</span></span>&gt;{{ model.content.productShortDescription }}&lt;/<span class="pl-ent">p</span>&gt;
+      &lt;<span class="pl-ent">p</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>mozu-availability<span class="pl-pds">"</span></span>&gt;&lt;<span class="pl-ent">strong</span>&gt;Availability:&lt;/<span class="pl-ent">strong</span>&gt; {{ model|get_product_attribute_value("tenant~availability") }}&lt;/<span class="pl-ent">p</span>&gt;
+   &lt;/<span class="pl-ent">div</span>&gt; 
+&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<p>Because of the special attribute <code>data-mozu-product-code</code>, this Hypr template will evaluate in place, with the <code>model</code> set to live product data from Mozu!</p>
+
+<p>And of course, this also works:</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/mozu-syndicated<span class="pl-pds">"</span></span> <span class="pl-e">data-mozu-product-query</span>=<span class="pl-s"><span class="pl-pds">"</span>blue<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">h4</span>&gt;Blue Stuff&lt;/<span class="pl-ent">h4</span>&gt;
+    &lt;<span class="pl-ent">ul</span>&gt;
+    {% for item in model.items %}
+      &lt;<span class="pl-ent">li</span>&gt;
+        &lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/{{ item.url }}<span class="pl-pds">"</span></span>&lt;<span class="pl-e">img</span> <span class="pl-e">style</span>=<span class="pl-s"><span class="pl-pds">"</span>width: 60%<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>{{ item.content.productImages|first|prop('imageUrl') }}<span class="pl-pds">"</span></span> /&gt; {{ item.content.productName }}&lt;/<span class="pl-ent">a</span>&gt;
+      &lt;/<span class="pl-ent">li</span>&gt;
+    {% endfor %}
+    &lt;/<span class="pl-ent">ul</span>&gt;
+&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">type</span>=<span class="pl-s"><span class="pl-pds">"</span>text/mozu-syndicated<span class="pl-pds">"</span></span> <span class="pl-e">data-mozu-product-filter</span>=<span class="pl-s"><span class="pl-pds">"</span>categoryId req 1<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">h4</span>&gt;Stuff In Category 1&lt;/<span class="pl-ent">h4</span>&gt;
+    &lt;<span class="pl-ent">ul</span>&gt;
+    {% for item in model.items %}
+      &lt;<span class="pl-ent">li</span>&gt;
+        &lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/{{ item.url }}<span class="pl-pds">"</span></span>&lt;<span class="pl-e">img</span> <span class="pl-e">style</span>=<span class="pl-s"><span class="pl-pds">"</span>width: 60%<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>{{ item.content.productImages|first|prop('imageUrl') }}<span class="pl-pds">"</span></span> /&gt; {{ item.content.productName }}&lt;/<span class="pl-ent">a</span>&gt;
+      &lt;/<span class="pl-ent">li</span>&gt;
+    {% endfor %}
+    &lt;/<span class="pl-ent">ul</span>&gt;
+&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<p>Embed as many snippets of Hypr as you want on the non-Mozu site; the syndicator will aggregate all the API calls it needs together into one, for efficiency and performance.</p>
+        </section>
+
+        <footer>
+          Mozu-syndicator is maintained by <a href="https://github.com/zetlen">zetlen</a><br>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
