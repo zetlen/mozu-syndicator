@@ -76,10 +76,14 @@
 <div class="highlight highlight-source-js"><pre>
 (<span class="pl-k">function</span>() {
 
-    <span class="pl-c1">window</span>.MozuSyndicatedStore <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/<span class="pl-pds">"</span></span>;
+<span class="pl-c1">window</span>.MozuSyndicatedStore <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/<span class="pl-pds">"</span></span>;
 
-    (<span class="pl-k">function</span>(<span class="pl-smi">s</span>, <span class="pl-smi">y</span>, <span class="pl-smi">n</span>, <span class="pl-smi">d</span>, <span class="pl-smi">i</span>, <span class="pl-smi">c</span>, <span class="pl-smi">a</span>, <span class="pl-smi">t</span>, <span class="pl-smi">e</span>) { <span class="pl-k">if</span> (<span class="pl-k">!</span>s[d]) { s[d] <span class="pl-k">=</span> c; t <span class="pl-k">=</span> y.<span class="pl-c1">createElement</span>(n), e <span class="pl-k">=</span> y.<span class="pl-c1">getElementsByTagName</span>(n)[<span class="pl-c1">0</span>]; t.async <span class="pl-k">=</span> <span class="pl-c1">1</span>; t.src <span class="pl-k">=</span> a <span class="pl-k">+</span> i; e.<span class="pl-c1">parentNode</span>.<span class="pl-c1">insertBefore</span>(t, e); } })(<span class="pl-c1">window</span>, <span class="pl-c1">document</span>, <span class="pl-s"><span class="pl-pds">'</span>script<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>MozuSyndicator<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">"</span>?syndicator<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>_loading_<span class="pl-pds">"</span></span>, MozuSyndicatedStore);
-
+(<span class="pl-k">function</span>(<span class="pl-smi">s</span>, <span class="pl-smi">y</span>, <span class="pl-smi">n</span>, <span class="pl-smi">d</span>, <span class="pl-smi">i</span>, <span class="pl-smi">c</span>, <span class="pl-smi">a</span>, <span class="pl-smi">t</span>, <span class="pl-smi">e</span>) { 
+  <span class="pl-k">if</span> (<span class="pl-k">!</span>s[d]) { s[d] <span class="pl-k">=</span> c; t <span class="pl-k">=</span> y.<span class="pl-c1">createElement</span>(n), 
+  e <span class="pl-k">=</span> y.<span class="pl-c1">getElementsByTagName</span>(n)[<span class="pl-c1">0</span>]; t.async <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+  t.src <span class="pl-k">=</span> a <span class="pl-k">+</span> i; e.<span class="pl-c1">parentNode</span>.<span class="pl-c1">insertBefore</span>(t,e);
+} })(<span class="pl-c1">window</span>,<span class="pl-c1">document</span>,<span class="pl-s"><span class="pl-pds">'</span>script<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>MozuSyndicator<span class="pl-pds">'</span></span>, 
+<span class="pl-s"><span class="pl-pds">"</span>?syndicator<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>_loading_<span class="pl-pds">"</span></span>,MozuSyndicatedStore);
 }());
 </pre></div>
 
@@ -96,11 +100,18 @@
    &lt;<span class="pl-ent">div</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>mozu-product<span class="pl-pds">"</span></span>&gt;
       &lt;<span class="pl-ent">h3</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>mozu-productname<span class="pl-pds">"</span></span>&gt;{{ model.content.productName }}&lt;/<span class="pl-ent">h2</span>&gt;
       &lt;<span class="pl-ent">figure</span>&gt;
-        &lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/{{ model.url }}<span class="pl-pds">"</span></span>&lt;<span class="pl-e">img</span> <span class="pl-e">style</span>=<span class="pl-s"><span class="pl-pds">"</span>width: 60%<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>{{ model.content.productImages|first|prop('imageUrl') }}<span class="pl-pds">"</span></span> /&gt;&lt;/<span class="pl-ent">a</span>&gt;
+        &lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/{{ model.url }}<span class="pl-pds">"</span></span>&gt;
+          &lt;<span class="pl-ent">img</span> 
+           <span class="pl-e">style</span>=<span class="pl-s"><span class="pl-pds">"</span>width: 60%<span class="pl-pds">"</span></span> 
+           <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>{{ model.content.productImages|first|prop('imageUrl') }}<span class="pl-pds">"</span></span> /&gt;
+        &lt;/<span class="pl-ent">a</span>&gt;
       &lt;/<span class="pl-ent">figure</span>&gt;
       &lt;<span class="pl-ent">h4</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>mozu-price<span class="pl-pds">"</span></span>&gt;{{ model.price.price|currency }}&lt;/<span class="pl-ent">h4</span>&gt;
       &lt;<span class="pl-ent">p</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>mozu-description<span class="pl-pds">"</span></span>&gt;{{ model.content.productShortDescription }}&lt;/<span class="pl-ent">p</span>&gt;
-      &lt;<span class="pl-ent">p</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>mozu-availability<span class="pl-pds">"</span></span>&gt;&lt;<span class="pl-ent">strong</span>&gt;Availability:&lt;/<span class="pl-ent">strong</span>&gt; {{ model|get_product_attribute_value("tenant~availability") }}&lt;/<span class="pl-ent">p</span>&gt;
+      &lt;<span class="pl-ent">p</span> <span class="pl-e">class</span>=<span class="pl-s"><span class="pl-pds">"</span>mozu-availability<span class="pl-pds">"</span></span>&gt;
+        &lt;<span class="pl-ent">strong</span>&gt;Availability:&lt;/<span class="pl-ent">strong</span>&gt; 
+        {{ model|get_product_attribute_value("tenant~availability") }}
+      &lt;/<span class="pl-ent">p</span>&gt;
    &lt;/<span class="pl-ent">div</span>&gt; 
 &lt;/<span class="pl-ent">script</span>&gt;</pre></div>
 
@@ -113,7 +124,12 @@
     &lt;<span class="pl-ent">ul</span>&gt;
     {% for item in model.items %}
       &lt;<span class="pl-ent">li</span>&gt;
-        &lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/{{ item.url }}<span class="pl-pds">"</span></span>&lt;<span class="pl-e">img</span> <span class="pl-e">style</span>=<span class="pl-s"><span class="pl-pds">"</span>width: 60%<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>{{ item.content.productImages|first|prop('imageUrl') }}<span class="pl-pds">"</span></span> /&gt; {{ item.content.productName }}&lt;/<span class="pl-ent">a</span>&gt;
+        &lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/{{ item.url }}<span class="pl-pds">"</span></span>&gt;
+          &lt;<span class="pl-ent">img</span>
+           <span class="pl-e">style</span>=<span class="pl-s"><span class="pl-pds">"</span>width: 60%<span class="pl-pds">"</span></span> 
+           <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>{{ item.content.productImages|first|prop('imageUrl') }}<span class="pl-pds">"</span></span> /&gt;
+          {{ item.content.productName }}
+        &lt;/<span class="pl-ent">a</span>&gt;
       &lt;/<span class="pl-ent">li</span>&gt;
     {% endfor %}
     &lt;/<span class="pl-ent">ul</span>&gt;
@@ -124,7 +140,12 @@
     &lt;<span class="pl-ent">ul</span>&gt;
     {% for item in model.items %}
       &lt;<span class="pl-ent">li</span>&gt;
-        &lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/{{ item.url }}<span class="pl-pds">"</span></span>&lt;<span class="pl-e">img</span> <span class="pl-e">style</span>=<span class="pl-s"><span class="pl-pds">"</span>width: 60%<span class="pl-pds">"</span></span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>{{ item.content.productImages|first|prop('imageUrl') }}<span class="pl-pds">"</span></span> /&gt; {{ item.content.productName }}&lt;/<span class="pl-ent">a</span>&gt;
+        &lt;<span class="pl-ent">a</span> <span class="pl-e">href</span>=<span class="pl-s"><span class="pl-pds">"</span>http://t8819-s12869.sandbox.mozu-qa.com/{{ item.url }}<span class="pl-pds">"</span></span>&gt;
+          &lt;<span class="pl-ent">img</span> 
+           <span class="pl-e">style</span>=<span class="pl-s"><span class="pl-pds">"</span>width: 60%<span class="pl-pds">"</span></span>
+           <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>{{ item.content.productImages|first|prop('imageUrl') }}<span class="pl-pds">"</span></span> /&gt;
+          {{ item.content.productName }}
+        &lt;/<span class="pl-ent">a</span>&gt;
       &lt;/<span class="pl-ent">li</span>&gt;
     {% endfor %}
     &lt;/<span class="pl-ent">ul</span>&gt;
